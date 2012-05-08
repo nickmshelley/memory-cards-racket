@@ -1,48 +1,7 @@
 #lang racket/gui
 (require rackunit
-         db)
-
-(define (init-db conn)
-  (query-exec conn
-              (string-append
-               "CREATE TABLE category"
-               "(name TEXT PRIMARY KEY)"))
-  (query-exec conn 
-              (string-append
-               "CREATE TABLE card"
-               "(cardid INTEGER PRIMARY KEY,"
-               "category TEXT"
-               "question TEXT,"
-               "answer TEXT,"
-               "review_level INTEGER,"
-               "last_review_date DATE,"
-               "status TEXT,"
-               "FOREIGN KEY(category) REFERENCES category(name))")))
-
-(define db-connection
-  (if (file-exists? "database.db")
-      (begin
-        (printf "~nexists~n")
-        (sqlite3-connect #:database "database.db"))
-      (begin
-        (printf "~ndoesn't exist~n")
-        (let ([c (sqlite3-connect #:database "database.db" #:mode 'create)])
-          (init-db c)
-          c))))
-
-(struct category (name cards) #:transparent)
-(struct card (question answer review-level
-                       last-review-date status) #:transparent)
-
-(define (generate-test-data num-categories cards-per-category)
-  (for/list ([i (in-range num-categories)])
-    (category (format "Category ~a" i)
-              (for/list ([j (in-range cards-per-category)])
-                (card (format "Question ~a" j)
-                      (format "Answer ~a" j)
-                      j
-                      (today-minus j)
-                      'ready)))))
+         "db.rkt"
+         "category.rkt")
 
 (define (today-minus num-days)
   (define seconds-in-day
@@ -50,8 +9,6 @@
   (seconds->date
    (- (current-seconds)
        (* num-days seconds-in-day))))
-
-(define test-categories (generate-test-data 4 50))
 
 (define frame 
   (new frame%
@@ -85,14 +42,10 @@
        [style '(border)]
        [alignment '(center center)]))
 
-(for ([cat test-categories])
+(for ([name (get-categories db-connection)])
   (new button%
        [parent categories-panel]
-       [label (category-name cat)]
-       [callback
-        (lambda (b e)
-          (send main-panel delete-child no-category-panel)
-          (display-category cat))]))
+       [label name]))
 
 (define no-category-title
   (new message%
@@ -100,7 +53,7 @@
        [label "Choose a category on the left"]
        [font title-font]))
 
-(define (display-category cat)
+#;(define (display-category cat)
   (define pan
     (new vertical-panel%
          [parent main-panel]
@@ -112,7 +65,7 @@
   (display-stats cat pan)
   pan)
 
-(define (display-stats cat parent)
+#;(define (display-stats cat parent)
   (define pan (new vertical-panel%
                    [parent parent]
                    [alignment '(left top)]))
@@ -128,7 +81,7 @@
          [parent pan]
          [label (format "~a:\t\t~a" i num)])))
 
-(define (review-levels cards)
+#;(define (review-levels cards)
   (map card-review-level cards))
        
 
