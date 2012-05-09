@@ -21,9 +21,9 @@
                "FOREIGN KEY(category) REFERENCES category(name))")))
 
 (define db-connection
-  (if (file-exists? "database.db")
-      (sqlite3-connect #:database "database.db")
+  (if (file-exists? "../model/database.db")
+      (sqlite3-connect #:database "../model/database.db")
       (begin
-        (let ([c (sqlite3-connect #:database "database.db" #:mode 'create)])
+        (let ([c (sqlite3-connect #:database "../model/database.db" #:mode 'create)])
           (init-db c)
           c))))
