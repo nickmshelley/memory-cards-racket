@@ -12,13 +12,14 @@
               (string-append
                "CREATE TABLE card"
                "(cardid INTEGER PRIMARY KEY,"
-               "category TEXT"
+               "category TEXT,"
                "question TEXT,"
                "answer TEXT,"
                "review_level INTEGER,"
                "last_review_date DATE,"
                "status TEXT,"
-               "FOREIGN KEY(category) REFERENCES category(name))")))
+               "FOREIGN KEY(category) REFERENCES category(name) "
+               "ON DELETE CASCADE ON UPDATE CASCADE)")))
 
 (define db-connection
   (if (file-exists? "../model/database.db")
@@ -27,3 +28,5 @@
         (let ([c (sqlite3-connect #:database "../model/database.db" #:mode 'create)])
           (init-db c)
           c))))
+
+(query-exec db-connection "PRAGMA foreign_keys = ON")

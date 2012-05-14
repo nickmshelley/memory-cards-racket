@@ -2,11 +2,17 @@
 (require db)
 
 (provide add-category
-         get-categories)
+         get-categories
+         delete-category)
 
 (define (add-category conn name)
   (query-exec conn
               "INSERT INTO category VALUES(?)"
+              name))
+
+(define (delete-category conn name)
+  (query-exec conn
+              "DELETE FROM category WHERE name=?"
               name))
 
 (define (get-categories conn)
