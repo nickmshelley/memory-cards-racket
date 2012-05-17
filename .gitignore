@@ -8,3 +8,6 @@ TAGS
 
 # compiled folder
 compiled
+
+# app database (specific to each user)
+model/database.db

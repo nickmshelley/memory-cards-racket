@@ -12,7 +12,7 @@
   (set! frame f))
 
 (define (show-ok-dialog title text [parent frame])
-  (define dialog (new dialog% [parent parent] [label title]))
+  (define dialog (new dialog% [parent parent] [label title] [style '(no-sheet)]))
   (new message% [parent dialog] [label text])
   (define panel (new horizontal-panel% [parent dialog]
                      [alignment '(center center)]))
@@ -21,7 +21,7 @@
   (send dialog show #t))
 
 (define (show-ok-cancel-dialog title text on-ok [parent frame])
-  (define dialog (new dialog% [parent parent] [label title]))
+  (define dialog (new dialog% [parent parent] [label title] [style '(no-sheet)]))
   (new message% [parent dialog] [label text])
   (define panel (new horizontal-panel% [parent dialog]
                      [alignment '(center center)]))
@@ -36,9 +36,7 @@
 ;on-ok is string -> any
 ;where string is the non-empty result
 (define (show-text-entry-dialog title label on-ok [parent frame])
-  (define dialog (new dialog% [parent parent] [label title]
-                      #;[x (send parent get-x)] 
-                      #;[y (send parent get-y)]))
+  (define dialog (new dialog% [parent parent] [label title] [style '(no-sheet)]))
   (define text-field (new text-field% [parent dialog] [label label]))
   (define panel (new horizontal-panel% [parent dialog]
                      [alignment '(center center)]))
@@ -61,7 +59,7 @@
 ;on-ok is string string -> any
 ;where strings are the non-empty results
 (define (show-double-text-entry-dialog title label1 label2 on-ok [parent frame])
-  (define dialog (new dialog% [parent parent] [label title]))
+  (define dialog (new dialog% [parent parent] [label title] [style '(no-sheet)]))
   (define question-field (new text-field% [parent dialog] [label label1]))
   (define answer-field (new text-field% [parent dialog] [label label1] [style '(multiple)]))
   (define panel (new horizontal-panel% [parent dialog]
