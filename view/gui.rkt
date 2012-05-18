@@ -6,7 +6,7 @@
 (define frame 
     (new frame%
          [label "Memory Cards"]
-         [width 500]
+         [width 800]
          [height 500]))
 
 (set-frame! frame)

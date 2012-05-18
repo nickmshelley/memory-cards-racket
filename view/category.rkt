@@ -1,6 +1,7 @@
 #lang racket/gui
 (require "../model/db.rkt"
          "common.rkt"
+         "table-panel.rkt"
          (prefix-in category: "../model/category.rkt")
          (prefix-in card: "card.rkt"))
 
@@ -69,7 +70,8 @@
          [font title-font]))
   (define button-panel
     (new horizontal-panel% [parent category-panel]
-         [stretchable-height #f]))
+         [stretchable-height #f]
+         [alignment '(center center)]))
   (new button% [parent button-panel] [label "Delete Category"]
        [callback (lambda (b e) (delete-category name))])
   (new button% [parent button-panel] [label "Add Card"]
@@ -80,7 +82,7 @@
        [callback (lambda (b e) (review-category name))])
   (new button% [parent button-panel] [label "Review Reverse"]
        [callback (lambda (b e) (review-reverse name))])
-  (list title button-panel))
+  (list title button-panel (show-stats-table name)))
 
 ;Handler functions
 
@@ -106,7 +108,14 @@
 (define (review-reverse name)
   (void))
 
-
+(define (show-stats-table cat)
+  (define table (new table-panel% [parent category-panel] [width 4] [style '(border)]
+                     [stretchable-width #f] [stretchable-height #f]))
+  (for ([i (in-range 15)])
+    (new message% 
+         [parent (new horizontal-panel% [parent table] [style '(border)] [alignment '(center center)])]
+         [label (format "~a" i)]))
+  table)
 
 
 
